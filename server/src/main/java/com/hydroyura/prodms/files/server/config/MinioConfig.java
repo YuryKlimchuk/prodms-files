@@ -1,15 +1,13 @@
-package com.hydroyura.prodms.files.config;
+package com.hydroyura.prodms.files.server.config;
 
-import com.hydroyura.prodms.files.props.MinioProps;
+import com.hydroyura.prodms.files.server.props.MinioProps;
 import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.UploadObjectArgs;
 import java.io.ByteArrayInputStream;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.net.http.HttpClient;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyStore;
 import java.security.cert.CertificateFactory;

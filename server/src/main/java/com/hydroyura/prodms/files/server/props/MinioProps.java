@@ -1,4 +1,4 @@
-package com.hydroyura.prodms.files.props;
+package com.hydroyura.prodms.files.server.props;
 
 
 import lombok.Data;

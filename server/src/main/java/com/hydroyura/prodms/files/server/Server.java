@@ -1,6 +1,6 @@
-package com.hydroyura.prodms.files;
+package com.hydroyura.prodms.files.server;
 
-import com.hydroyura.prodms.files.props.MinioProps;
+import com.hydroyura.prodms.files.server.props.MinioProps;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

@@ -1,4 +1,4 @@
-package com.hydroyura.prodms.files;
+package com.hydroyura.prodms.files.server;
 
 public class Main {
     public static void main(String[] args) {
