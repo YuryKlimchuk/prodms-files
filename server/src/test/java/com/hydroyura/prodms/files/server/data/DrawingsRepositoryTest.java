@@ -3,6 +3,7 @@ package com.hydroyura.prodms.files.server.data;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_DOCKER_IMAGE;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_DRAWING_BUCKET;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_PWD;
+import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_CONTAINER_NAME;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_USER;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -24,12 +25,13 @@ class DrawingsRepositoryTest {
     public static MinIOContainer TEST_CONTAINER =
         new MinIOContainer(MINIO_DOCKER_IMAGE)
             .withUserName(MINIO_USER)
-            .withPassword(MINIO_PWD);
+            .withPassword(MINIO_PWD)
+            .withCreateContainerCmdModifier(cmd -> cmd.withName(MINIO_TEST_CONTAINER_NAME));
 
     @BeforeAll
     static void startContainer() throws Exception {
         TEST_CONTAINER.start();
-        TEST_CONTAINER.execInContainer("bash", "-c", "mc mb minio/%s".formatted(MINIO_DRAWING_BUCKET));
+        TEST_CONTAINER.execInContainer("bash", "-c", "mc mb data/%s".formatted(MINIO_DRAWING_BUCKET));
     }
 
     @AfterAll

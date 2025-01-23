@@ -9,6 +9,7 @@ public class DrawingRepositoryTestUnits {
     //public static final String MINIO_DOCKER_IMAGE = "minio/minio:RELEASE.2024-02-24T01-33-20Z";
     public static final String MINIO_USER = "minio";
     public static final String MINIO_PWD = "minio123";
-    public static final String MINIO_DRAWING_BUCKET = "DRAWING_TEST";
+    public static final String MINIO_DRAWING_BUCKET = "drawing-test";
+    public static final String MINIO_TEST_CONTAINER_NAME = "minio-test";
 
 }
