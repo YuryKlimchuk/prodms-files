@@ -10,10 +10,10 @@ public interface DrawingsDocumentedController {
 
 
     @RequestMapping(method = RequestMethod.GET, value = "api/v1/drawings/{number}")
-    ResponseEntity<ApiRes<?>> getLatest(String number);
+    ResponseEntity<ApiRes<?>> getLatest(String number, String parent);
 
     @RequestMapping(method = RequestMethod.GET, value = "api/v1/drawings/{number}/all")
-    ResponseEntity<ApiRes<?>> getAll(String number);
+    ResponseEntity<ApiRes<?>> getAll(String number, String parent);
 
     @RequestMapping(method = RequestMethod.POST, value = "api/v1/drawings/{number}")
     ResponseEntity<ApiRes<?>> add(String number);
