@@ -17,6 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <minio.version>8.5.17</minio.version>
         <spring.doc.openapi.version>2.6.0</spring.doc.openapi.version>
+        <testcontainers.version>1.19.3</testcontainers.version>
     </properties>
 
 
@@ -28,6 +29,13 @@
         </dependency>
 
         <dependency>
+            <groupId>com.hydroyura.prodms.archive</groupId>
+            <artifactId>client</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <version>${minio.version}</version>
@@ -37,6 +45,16 @@
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${spring.doc.openapi.version}</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>minio</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+
     </dependencies>
 
     <build>
