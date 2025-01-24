@@ -20,7 +20,7 @@ public class DrawingsRepository {
     private final String bucket;
 
 
-    public DrawingsRepository(MinioClient minioClient, @Value("${minio.drawing.bucket}") String bucket) {
+    public DrawingsRepository(MinioClient minioClient, @Value("${minio.drawings.bucket}") String bucket) {
         this.minioClient = minioClient;
         this.bucket = bucket;
     }

@@ -2,3 +2,6 @@ minio:
   url: ${MINIO_URL:http://localhost:9000}
   accessKey: ${MINIO_ACCESS_KEY:minio}
   accessSecret: ${MINIO_ACCESS_SECRET:minio123}
+
+  drawings:
+    bucket: drawings-bucket
