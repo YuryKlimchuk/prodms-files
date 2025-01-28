@@ -11,10 +11,14 @@ import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_FILE_CONTENT_3;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_FILE_NAME_1;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_FILE_NAME_2;
+import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_FILE_NAME_3;
+import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_FILE_NAME_PREDICATE;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_USER;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.minio.MinioClient;
+import java.util.List;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -92,8 +96,9 @@ class DrawingsRepositoryTest {
 
 
     @Test
-    void listObjects_OK() throws Exception {
+    void listObjects_GET_ONLY_LATEST() throws Exception {
         // given
+        // file 1
         TEST_CONTAINER.execInContainer(
             "bash",
             "-c",
@@ -104,6 +109,7 @@ class DrawingsRepositoryTest {
             "-c",
             MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_1, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1)
         );
+        // file 2
         TEST_CONTAINER.execInContainer(
             "bash",
             "-c",
@@ -114,6 +120,7 @@ class DrawingsRepositoryTest {
             "-c",
             MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_2, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_2)
         );
+        // file 1 new version
         TEST_CONTAINER.execInContainer(
             "bash",
             "-c",
@@ -125,9 +132,45 @@ class DrawingsRepositoryTest {
             MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_1, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1)
         );
 
+        // when
+        var result = repository.listObjects(MINIO_TEST_FILE_NAME_PREDICATE);
 
-
-        int a = 1;
+        // then
+        assertEquals(2, result.size());
+        assertTrue(result.containsAll(List.of(MINIO_TEST_FILE_NAME_1, MINIO_TEST_FILE_NAME_2)));
     }
+
+    @Test
+    void listObjects_FIND_ONLY_WITH_PREFIX() throws Exception {
+        // given
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_CREATE_FILE.formatted(MINIO_TEST_FILE_NAME_1, MINIO_TEST_FILE_CONTENT_1)
+        );
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_1, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1)
+        );
+        // file 2
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_CREATE_FILE.formatted(MINIO_TEST_FILE_NAME_3, MINIO_TEST_FILE_CONTENT_2)
+        );
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_3, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_3)
+        );
+
+        // when
+        var result = repository.listObjects(MINIO_TEST_FILE_NAME_PREDICATE);
+
+        // then
+        assertEquals(1, result.size());
+    }
+
 
 }

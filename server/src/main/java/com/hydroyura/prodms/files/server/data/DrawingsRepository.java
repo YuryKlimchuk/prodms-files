@@ -1,5 +1,6 @@
 package com.hydroyura.prodms.files.server.data;
 
+import com.hydroyura.prodms.files.server.api.enums.DrawingType;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;
@@ -11,10 +12,14 @@ import io.minio.http.Method;
 import io.minio.messages.Item;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +49,7 @@ public class DrawingsRepository {
     }
 
 
-    public Collection<String> listObjects(String number) {
+    public Map<DrawingType, String> listObjects(String number) {
         var result = minioClient.listObjects(
             ListObjectsArgs.builder()
                 .bucket(bucket)
@@ -52,7 +57,7 @@ public class DrawingsRepository {
             .build());
         return StreamSupport.stream(result.spliterator(), false)
             .map(this::convertResultItem)
-            .toList();
+            .collect(Collectors.toMap(Pair::getKey, Pair::getValue));
     }
 
 
@@ -83,13 +88,25 @@ public class DrawingsRepository {
 
 
     // TODO: handle ex
-    private String convertResultItem(Result<Item> item) {
+    private Pair<DrawingType, String> convertResultItem(Result<Item> item) {
         try {
-            return item.get().objectName();
+            Item arg = item.get();
+            String objectName = arg.objectName();
+            DrawingType type = convertMetaToType(arg.userMetadata().get("type"));
+            return new ImmutablePair<>(type, objectName);
         } catch (Exception e) {
             log.error("Some error", e);
             throw new RuntimeException("");
         }
+    }
+
+    // TODO: handle ex
+    private DrawingType convertMetaToType(String value) {
+        return Arrays
+            .stream(DrawingType.values())
+            .filter(arg -> arg.getCode().equalsIgnoreCase(value))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Can't !!!!"));
     }
 
 

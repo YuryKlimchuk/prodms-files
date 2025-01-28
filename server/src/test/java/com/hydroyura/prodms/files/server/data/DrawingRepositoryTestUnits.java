@@ -12,11 +12,12 @@ public class DrawingRepositoryTestUnits {
     public static final String MINIO_TEST_CONTAINER_NAME = "minio-test";
     public static final String MINIO_TEST_FILE_NAME_1 = "test1.txt";
     public static final String MINIO_TEST_FILE_NAME_2 = "test2.txt";
+    public static final String MINIO_TEST_FILE_NAME_3 = "file3.txt";
+    public static final String MINIO_TEST_FILE_NAME_PREDICATE= "test";
 
     public static final String MINIO_TEST_FILE_CONTENT_1 = "This is content number 1";
     public static final String MINIO_TEST_FILE_CONTENT_2 = "This is content number 2";
     public static final String MINIO_TEST_FILE_CONTENT_3 = "This is content number 3";
-    public static final String MINIO_TEST_FILE_CONTENT_4 = "This is content number 4";
 
     public static final String MINIO_CMD_CREATE_FILE = """
 cat <<'EOF' >> %s
@@ -24,5 +25,7 @@ cat <<'EOF' >> %s
 EOF""";
 
     public static final String MINIO_CMD_PLACE_FILE_TO_BUCKET = "mc cp %s minio-test/%s/%s";
+
+    public static final String MINIO_CMD_SET_TAG = "mc tag set minio-test/%s/%s unit_num=%s";
 
 }
