@@ -1,12 +1,18 @@
 package com.hydroyura.prodms.files.server.data;
 
 import io.minio.GetPresignedObjectUrlArgs;
+import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;
+import io.minio.Result;
 import io.minio.StatObjectArgs;
 import io.minio.StatObjectResponse;
 import io.minio.errors.ErrorResponseException;
 import io.minio.http.Method;
+import io.minio.messages.Item;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +32,7 @@ public class DrawingsRepository {
     }
 
 
-    @SneakyThrows
+    @SneakyThrows //TODO: handle ex
     private String getDrawingUrlInternal(String object) {
         return minioClient.getPresignedObjectUrl(
             GetPresignedObjectUrlArgs.builder()
@@ -36,6 +42,19 @@ public class DrawingsRepository {
                 .build()
         );
     }
+
+
+    public Collection<String> listObjects(String number) {
+        var result = minioClient.listObjects(
+            ListObjectsArgs.builder()
+                .bucket(bucket)
+                .prefix(number)
+            .build());
+        return StreamSupport.stream(result.spliterator(), false)
+            .map(this::convertResultItem)
+            .toList();
+    }
+
 
     public Optional<String> getDrawingUrl(String object) {
         return getMetadata(object)
@@ -63,6 +82,15 @@ public class DrawingsRepository {
     }
 
 
+    // TODO: handle ex
+    private String convertResultItem(Result<Item> item) {
+        try {
+            return item.get().objectName();
+        } catch (Exception e) {
+            log.error("Some error", e);
+            throw new RuntimeException("");
+        }
+    }
 
 
 }

@@ -1,7 +1,7 @@
 package com.hydroyura.prodms.files.server.controller.swagger;
 
 
-import com.hydroyura.prodms.files.server.api.ApiRes;
+import com.hydroyura.prodms.common.model.api.ApiRes;
 import com.hydroyura.prodms.files.server.api.drawings.params.GetLatestParams;
 import com.hydroyura.prodms.files.server.api.res.GetLatestRes;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -22,7 +22,6 @@ public interface DrawingsDocumentedController {
             description = "Success"
         )
     })
-    @RequestMapping(method = RequestMethod.GET, value = "api/v1/drawings/{number}")
     ResponseEntity<ApiRes<?>> getLatest(String number, GetLatestParams params);
 
     class GetLatestSuccess extends ApiRes<GetLatestRes> {}

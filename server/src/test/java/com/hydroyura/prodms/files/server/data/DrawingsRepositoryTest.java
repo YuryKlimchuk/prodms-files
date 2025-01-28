@@ -7,7 +7,10 @@ import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_PWD;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_CONTAINER_NAME;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_FILE_CONTENT_1;
+import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_FILE_CONTENT_2;
+import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_FILE_CONTENT_3;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_FILE_NAME_1;
+import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_TEST_FILE_NAME_2;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_USER;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -85,6 +88,46 @@ class DrawingsRepositoryTest {
 
         // then
         assertTrue(result.isPresent());
+    }
+
+
+    @Test
+    void listObjects_OK() throws Exception {
+        // given
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_CREATE_FILE.formatted(MINIO_TEST_FILE_NAME_1, MINIO_TEST_FILE_CONTENT_1)
+        );
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_1, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1)
+        );
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_CREATE_FILE.formatted(MINIO_TEST_FILE_NAME_2, MINIO_TEST_FILE_CONTENT_2)
+        );
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_2, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_2)
+        );
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_CREATE_FILE.formatted(MINIO_TEST_FILE_NAME_1, MINIO_TEST_FILE_CONTENT_3)
+        );
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_1, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1)
+        );
+
+
+
+        int a = 1;
     }
 
 }
