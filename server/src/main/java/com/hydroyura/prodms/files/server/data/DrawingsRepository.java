@@ -13,6 +13,7 @@ import io.minio.messages.Item;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -54,6 +55,7 @@ public class DrawingsRepository {
             ListObjectsArgs.builder()
                 .bucket(bucket)
                 .prefix(number)
+                .includeUserMetadata(true)
             .build());
         return StreamSupport.stream(result.spliterator(), false)
             .map(this::convertResultItem)
@@ -92,7 +94,8 @@ public class DrawingsRepository {
         try {
             Item arg = item.get();
             String objectName = arg.objectName();
-            DrawingType type = convertMetaToType(arg.userMetadata().get("type"));
+            //DrawingType type = convertMetaToType(arg.userMetadata().get("type"));
+            DrawingType type = extractTypeFromTags(arg.userTags());
             return new ImmutablePair<>(type, objectName);
         } catch (Exception e) {
             log.error("Some error", e);
@@ -105,6 +108,23 @@ public class DrawingsRepository {
         return Arrays
             .stream(DrawingType.values())
             .filter(arg -> arg.getCode().equalsIgnoreCase(value))
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Can't !!!!"));
+    }
+
+    private DrawingType extractTypeFromTags(String tags) {
+        var type = Arrays.stream(tags.split("&"))
+            .map(s -> s.split("="))
+            .filter(arr -> arr.length == 2)
+            .map(arr -> Map.entry(arr[0], arr[1]))
+            .filter(entry -> "type".equals(entry.getKey()))
+            .map(Map.Entry::getValue)
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("Can't !!!!"));
+
+        return Arrays
+            .stream(DrawingType.values())
+            .filter(arg -> arg.getCode().equalsIgnoreCase(type))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Can't !!!!"));
     }
