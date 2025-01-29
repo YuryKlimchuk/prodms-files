@@ -112,7 +112,7 @@ public class DrawingsRepository {
             .orElseThrow(() -> new RuntimeException("Can't !!!!"));
     }
 
-    private DrawingType extractTypeFromTags(String tags) {
+    private DrawingType extractTypeFromTags1(String tags) {
         var type = Arrays.stream(tags.split("&"))
             .map(s -> s.split("="))
             .filter(arr -> arr.length == 2)
@@ -127,6 +127,30 @@ public class DrawingsRepository {
             .filter(arg -> arg.getCode().equalsIgnoreCase(type))
             .findFirst()
             .orElseThrow(() -> new RuntimeException("Can't !!!!"));
+    }
+
+
+    private DrawingType extractTypeFromTags(String tags) {
+        return Optional
+            .ofNullable(tags)
+            .stream()
+            .map(s -> s.split("&"))
+            .flatMap(Arrays::stream)
+            .map(s -> s.split("="))
+            .filter(arr -> arr.length == 2)
+            .map(arr -> Map.entry(arr[0], arr[1]))
+            .filter(entry -> "type".equals(entry.getKey()))
+            .map(Map.Entry::getValue)
+            .findFirst()
+            .flatMap(this::typeByCode)
+            .orElseThrow(() -> new RuntimeException("Need to create custom exception"));
+    }
+
+    private Optional<DrawingType> typeByCode(String code) {
+        return Arrays
+            .stream(DrawingType.values())
+            .filter(arg -> arg.getCode().equalsIgnoreCase(code))
+            .findFirst();
     }
 
 
