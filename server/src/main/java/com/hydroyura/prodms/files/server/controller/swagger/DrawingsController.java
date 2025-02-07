@@ -2,7 +2,7 @@ package com.hydroyura.prodms.files.server.controller.swagger;
 
 import com.hydroyura.prodms.common.model.api.ApiRes;
 import com.hydroyura.prodms.files.server.api.drawings.params.GetLatestParams;
-import com.hydroyura.prodms.files.server.api.res.GetLatestRes;
+import com.hydroyura.prodms.files.server.api.res.GetUrlsLatestRes;
 import com.hydroyura.prodms.files.server.service.DrawingsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ public class DrawingsController implements DrawingsDocumentedController {
     @Override
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/drawings/{number}")
     public ResponseEntity<ApiRes<?>> getLatest(String number, GetLatestParams params) {
-        ApiRes<GetLatestRes> apiRes = new ApiRes<>();
+        ApiRes<GetUrlsLatestRes> apiRes = new ApiRes<>();
         var result = drawingsService.getLatest(number, params);
         // TODO: fix system.out.println
         result.ifPresentOrElse(apiRes::setData, () -> System.out.println("123"));

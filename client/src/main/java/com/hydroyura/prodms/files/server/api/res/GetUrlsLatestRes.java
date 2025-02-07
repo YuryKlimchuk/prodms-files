@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetLatestRes {
+public class GetUrlsLatestRes {
 
     private Map<DrawingType, String> drawings = new HashMap<>();
 
