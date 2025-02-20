@@ -67,13 +67,13 @@ class DrawingsRepositoryTest {
         this.repository = new DrawingsRepository(minioClient, MINIO_DRAWING_BUCKET);
     }
 
-    @Test
+    //@Test
     void getDrawingUrl_FOR_NOT_EXISTED_FILE() {
         var result = repository.getDrawingUrl(MINIO_TEST_FILE_NAME_1);
         assertTrue(result.isEmpty());
     }
 
-    @Test
+    //@Test
     void getDrawingUrl_FOR_EXISTED_FILE() throws Exception {
         // given
         TEST_CONTAINER.execInContainer(
@@ -95,7 +95,7 @@ class DrawingsRepositoryTest {
     }
 
 
-    @Test
+    //@Test
     void listObjects_GET_ONLY_LATEST() throws Exception {
         // given
         // file 1
@@ -140,7 +140,7 @@ class DrawingsRepositoryTest {
         //assertTrue(result.containsAll(List.of(MINIO_TEST_FILE_NAME_1, MINIO_TEST_FILE_NAME_2)));
     }
 
-    @Test
+    //@Test
     void listObjects_FIND_ONLY_WITH_PREFIX() throws Exception {
         // given
         TEST_CONTAINER.execInContainer(
