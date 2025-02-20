@@ -27,9 +27,6 @@ public interface DrawingsDocumentedController {
     class GetLatestSuccess extends ApiRes<GetUrlsLatestRes> {}
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "api/v1/drawings/{number}/all")
-    ResponseEntity<ApiRes<?>> getAll(String number, String parent);
-
     @RequestMapping(method = RequestMethod.POST, value = "api/v1/drawings/{number}")
     ResponseEntity<ApiRes<?>> add(String number);
 

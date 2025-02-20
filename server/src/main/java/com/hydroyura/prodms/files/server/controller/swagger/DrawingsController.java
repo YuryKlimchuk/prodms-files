@@ -31,11 +31,7 @@ public class DrawingsController implements DrawingsDocumentedController {
      }
 
     @Override
-    public ResponseEntity<ApiRes<?>> getAll(String number, String parent) {
-        return null;
-    }
-
-    @Override
+    @RequestMapping(method = RequestMethod.POST, value = "/api/v1/drawings/{number}")
     public ResponseEntity<ApiRes<?>> add(String number) {
         return null;
     }
