@@ -12,5 +12,5 @@ basic:
     id: "files"
     port: 8080
 
-db:
+minio:
   url: prodms-minio-hl.prodms-infra.svc:9000
