@@ -68,8 +68,15 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
-                    <mainClass>com.hydroyura.prodms.files.server.Server</mainClass>
+                    <classifier>exec</classifier>
                     <layout>JAR</layout>
                 </configuration>
             </plugin>
