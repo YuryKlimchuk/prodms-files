@@ -1,0 +1,16 @@
+basicEnabled: true
+basic:
+  replicaCount: 1
+  
+  image:
+    repository: "ghcr.io/yuryklimchuk"
+    tag: "prodms/files-server"
+    version: "1.0.0-SNAPSHOT"
+    pullPolicy: Always
+  
+  app:
+    id: "files"
+    port: 8080
+
+db:
+  url: prodms-minio-hl.prodms-infra.svc:9000

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.basic.app.id }}-env-cm
+  namespace: {{ .Release.namespace }}
+data:
+  MINIO_URL: {{ required "'minio.url' parameter is required" .Values.minio.url | quote }}

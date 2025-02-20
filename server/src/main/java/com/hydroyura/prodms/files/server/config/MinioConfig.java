@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 
 @Configuration
-public class MinioConfig {
+public class MinioConfig{
 
     @Bean
     OkHttpClient okHttpClient(MinioProps props) {
