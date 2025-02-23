@@ -94,7 +94,6 @@ public class DrawingsRepository {
         try {
             Item arg = item.get();
             String objectName = arg.objectName();
-            //DrawingType type = convertMetaToType(arg.userMetadata().get("type"));
             DrawingType type = extractTypeFromTags(arg.userTags());
             return new ImmutablePair<>(type, objectName);
         } catch (Exception e) {

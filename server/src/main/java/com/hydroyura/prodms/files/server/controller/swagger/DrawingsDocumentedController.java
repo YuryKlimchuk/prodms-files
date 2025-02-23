@@ -3,6 +3,8 @@ package com.hydroyura.prodms.files.server.controller.swagger;
 
 import com.hydroyura.prodms.common.model.api.ApiRes;
 import com.hydroyura.prodms.files.server.api.drawings.params.GetLatestParams;
+import com.hydroyura.prodms.files.server.api.enums.DrawingType;
+import com.hydroyura.prodms.files.server.api.req.AddFileReq;
 import com.hydroyura.prodms.files.server.api.res.GetUrlsLatestRes;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,13 +24,12 @@ public interface DrawingsDocumentedController {
             description = "Success"
         )
     })
-    ResponseEntity<ApiRes<?>> getLatest(String number, GetLatestParams params);
-
+    ResponseEntity<ApiRes<?>> getFiles(String number, GetLatestParams params);
     class GetLatestSuccess extends ApiRes<GetUrlsLatestRes> {}
 
 
     @RequestMapping(method = RequestMethod.POST, value = "api/v1/drawings/{number}")
-    ResponseEntity<ApiRes<?>> add(String number);
+    ResponseEntity<ApiRes<?>> addFile(String number, AddFileReq req);
 
 
 }

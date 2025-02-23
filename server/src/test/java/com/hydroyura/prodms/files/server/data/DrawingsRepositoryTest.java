@@ -2,6 +2,7 @@ package com.hydroyura.prodms.files.server.data;
 
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_CMD_CREATE_FILE;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_CMD_PLACE_FILE_TO_BUCKET;
+import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_CMD_SET_TAG;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_DOCKER_IMAGE;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_DRAWING_BUCKET;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_PWD;
@@ -67,13 +68,13 @@ class DrawingsRepositoryTest {
         this.repository = new DrawingsRepository(minioClient, MINIO_DRAWING_BUCKET);
     }
 
-    //@Test
+    @Test
     void getDrawingUrl_FOR_NOT_EXISTED_FILE() {
         var result = repository.getDrawingUrl(MINIO_TEST_FILE_NAME_1);
         assertTrue(result.isEmpty());
     }
 
-    //@Test
+    @Test
     void getDrawingUrl_FOR_EXISTED_FILE() throws Exception {
         // given
         TEST_CONTAINER.execInContainer(
@@ -95,7 +96,7 @@ class DrawingsRepositoryTest {
     }
 
 
-    //@Test
+    @Test
     void listObjects_GET_ONLY_LATEST() throws Exception {
         // given
         // file 1
@@ -109,6 +110,11 @@ class DrawingsRepositoryTest {
             "-c",
             MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_1, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1)
         );
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_SET_TAG.formatted(MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1, "type", "SI")
+        );
         // file 2
         TEST_CONTAINER.execInContainer(
             "bash",
@@ -119,6 +125,11 @@ class DrawingsRepositoryTest {
             "bash",
             "-c",
             MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_2, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_2)
+        );
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_SET_TAG.formatted(MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_2, "type", "AS")
         );
         // file 1 new version
         TEST_CONTAINER.execInContainer(
@@ -131,7 +142,11 @@ class DrawingsRepositoryTest {
             "-c",
             MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_1, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1)
         );
-
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_SET_TAG.formatted( MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1, "type", "SI")
+        );
         // when
         var result = repository.listObjects(MINIO_TEST_FILE_NAME_PREDICATE);
 
@@ -140,7 +155,7 @@ class DrawingsRepositoryTest {
         //assertTrue(result.containsAll(List.of(MINIO_TEST_FILE_NAME_1, MINIO_TEST_FILE_NAME_2)));
     }
 
-    //@Test
+    @Test
     void listObjects_FIND_ONLY_WITH_PREFIX() throws Exception {
         // given
         TEST_CONTAINER.execInContainer(
@@ -153,7 +168,12 @@ class DrawingsRepositoryTest {
             "-c",
             MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_1, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1)
         );
-        // file 2
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_SET_TAG.formatted( MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_1, "type", "SI")
+        );
+        // file 3
         TEST_CONTAINER.execInContainer(
             "bash",
             "-c",
@@ -164,7 +184,11 @@ class DrawingsRepositoryTest {
             "-c",
             MINIO_CMD_PLACE_FILE_TO_BUCKET.formatted(MINIO_TEST_FILE_NAME_3, MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_3)
         );
-
+        TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_SET_TAG.formatted( MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_3, "type", "SI")
+        );
         // when
         var result = repository.listObjects(MINIO_TEST_FILE_NAME_PREDICATE);
 

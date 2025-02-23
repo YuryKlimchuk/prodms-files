@@ -26,6 +26,6 @@ EOF""";
 
     public static final String MINIO_CMD_PLACE_FILE_TO_BUCKET = "mc cp %s minio-test/%s/%s";
 
-    public static final String MINIO_CMD_SET_TAG = "mc tag set minio-test/%s/%s unit_num=%s";
+    public static final String MINIO_CMD_SET_TAG = "mc tag set minio-test/%s/%s %s=%s";
 
 }

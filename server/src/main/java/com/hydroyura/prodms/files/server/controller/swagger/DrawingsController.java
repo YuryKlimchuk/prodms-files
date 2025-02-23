@@ -2,11 +2,13 @@ package com.hydroyura.prodms.files.server.controller.swagger;
 
 import com.hydroyura.prodms.common.model.api.ApiRes;
 import com.hydroyura.prodms.files.server.api.drawings.params.GetLatestParams;
+import com.hydroyura.prodms.files.server.api.req.AddFileReq;
 import com.hydroyura.prodms.files.server.api.res.GetUrlsLatestRes;
 import com.hydroyura.prodms.files.server.service.DrawingsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +22,7 @@ public class DrawingsController implements DrawingsDocumentedController {
 
     @Override
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/drawings/{number}")
-    public ResponseEntity<ApiRes<?>> getLatest(String number, GetLatestParams params) {
+    public ResponseEntity<ApiRes<?>> getFiles(String number, GetLatestParams params) {
         ApiRes<GetUrlsLatestRes> apiRes = new ApiRes<>();
         var result = drawingsService.getLatest(number, params);
         // TODO: fix system.out.println
@@ -32,7 +34,7 @@ public class DrawingsController implements DrawingsDocumentedController {
 
     @Override
     @RequestMapping(method = RequestMethod.POST, value = "/api/v1/drawings/{number}")
-    public ResponseEntity<ApiRes<?>> add(String number) {
+    public ResponseEntity<ApiRes<?>> addFile(String number, @RequestBody AddFileReq req) {
         return null;
     }
 }
