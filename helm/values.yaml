@@ -13,4 +13,4 @@ basic:
     port: 8080
 
 minio:
-  url: prodms-minio-hl.prodms-infra.svc:9000
+  url: http://prodms-minio-hl.prodms-infra.svc:9000
