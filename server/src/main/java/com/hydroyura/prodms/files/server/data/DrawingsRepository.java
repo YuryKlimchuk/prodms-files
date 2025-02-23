@@ -4,12 +4,15 @@ import com.hydroyura.prodms.files.server.api.enums.DrawingType;
 import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.ListObjectsArgs;
 import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
 import io.minio.Result;
 import io.minio.StatObjectArgs;
 import io.minio.StatObjectResponse;
 import io.minio.errors.ErrorResponseException;
 import io.minio.http.Method;
 import io.minio.messages.Item;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
@@ -88,6 +91,20 @@ public class DrawingsRepository {
         }
     }
 
+    public void addFile(String object, Map<String, String> tags, byte[] bytes) {
+        try(InputStream is = new ByteArrayInputStream(bytes)) {
+            minioClient.putObject(
+                PutObjectArgs.builder()
+                    .stream(is, bytes.length, -1)
+                    .bucket(bucket)
+                    .object(object)
+                    .tags(tags)
+                    .build()
+            );
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     // TODO: handle ex
     private Pair<DrawingType, String> convertResultItem(Result<Item> item) {

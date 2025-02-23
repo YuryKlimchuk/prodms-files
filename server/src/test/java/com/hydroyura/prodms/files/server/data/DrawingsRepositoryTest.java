@@ -1,6 +1,7 @@
 package com.hydroyura.prodms.files.server.data;
 
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_CMD_CREATE_FILE;
+import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_CMD_GET_TAGS;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_CMD_PLACE_FILE_TO_BUCKET;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_CMD_SET_TAG;
 import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.MINIO_DOCKER_IMAGE;
@@ -18,8 +19,12 @@ import static com.hydroyura.prodms.files.server.data.DrawingRepositoryTestUnits.
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.hydroyura.prodms.files.server.api.enums.DrawingType;
 import io.minio.MinioClient;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Optional;
 import org.junit.ClassRule;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -196,5 +201,29 @@ class DrawingsRepositoryTest {
         assertEquals(1, result.size());
     }
 
+
+    @Test
+    void addFile_SUCCESS() throws Exception {
+        repository.addFile(
+            MINIO_TEST_FILE_NAME_2,
+            Map.of("type", DrawingType.SIMPLE.getCode()),
+            MINIO_TEST_FILE_CONTENT_2.getBytes(StandardCharsets.UTF_8)
+        );
+
+        var result = TEST_CONTAINER.execInContainer(
+            "bash",
+            "-c",
+            MINIO_CMD_GET_TAGS.formatted(MINIO_DRAWING_BUCKET, MINIO_TEST_FILE_NAME_2)
+        );
+
+        assertEquals(0, result.getExitCode());
+
+        Optional<String> type = Arrays
+            .stream(result.getStdout().split("\\n"))
+            .filter(s -> s.contains("type :"))
+            .map(s -> s.split(" : ")[1])
+            .findFirst();
+        assertTrue(type.isPresent() && type.get().equals("SI"));
+    }
 
 }

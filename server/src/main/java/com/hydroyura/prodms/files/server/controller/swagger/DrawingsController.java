@@ -24,7 +24,7 @@ public class DrawingsController implements DrawingsDocumentedController {
     @RequestMapping(method = RequestMethod.GET, value = "/api/v1/drawings/{number}")
     public ResponseEntity<ApiRes<?>> getFiles(String number, GetLatestParams params) {
         ApiRes<GetUrlsLatestRes> apiRes = new ApiRes<>();
-        var result = drawingsService.getLatest(number, params);
+        var result = drawingsService.getFiles(number, params);
         // TODO: fix system.out.println
         result.ifPresentOrElse(apiRes::setData, () -> System.out.println("123"));
         return result.isPresent()
@@ -35,6 +35,8 @@ public class DrawingsController implements DrawingsDocumentedController {
     @Override
     @RequestMapping(method = RequestMethod.POST, value = "/api/v1/drawings/{number}")
     public ResponseEntity<ApiRes<?>> addFile(String number, @RequestBody AddFileReq req) {
-        return null;
+        drawingsService.addFile(number, req);
+        ApiRes<GetUrlsLatestRes> apiRes = new ApiRes<>();
+        return ResponseEntity.ok(apiRes);
     }
 }
